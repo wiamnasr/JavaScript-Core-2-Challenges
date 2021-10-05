@@ -1,12 +1,40 @@
+// 1. Remove all of the punctuation (e.g. ".", ",", "!", "?") to tidy up the results
+
+// 2. Ignore the case of the words to find more unique words. e.g. (A === a, Hello === hello)
+
+// 3. Order the results to find out which word is the most common in the chapter
+
 function calculateWords(chapterOfABook) {
   const wordCount = {};
 
   // Write your code in here
+  let tidyChap = chapterOfABook
+    .toLowerCase()
+    .replace(/[.,\/#!£$%\^&\*;:{}=\-_`~()]/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    .split(" ");
+
+  for (const word of tidyChap) {
+    wordCount[word] = wordCount[word] ? wordCount[word] + 1 : 1;
+  }
 
   return wordCount;
 }
 
-calculateWords(getDraculaChapterOne());
+console.log(calculateWords(getDraculaChapterOne()));
+
+//////////////// Self tests
+
+let testString =
+  "            A string            with, some $&£*&^%!)(punctuation           ";
+let tidyChap = testString
+  .toLowerCase()
+  .replace(/[.,\/#!£$%\^&\*;:{}=\-_`~()]/g, "")
+  .replace(/\s{2,}/g, " ")
+  .trim()
+  .split(" ");
+console.log(tidyChap);
 
 /**                            */
 /**                            */
