@@ -1,57 +1,45 @@
 let randomNumber = Math.floor(Math.random() * 100 + 1);
 console.log(randomNumber);
+let guesses = [];
 
 function guessNumber() {
   //Collect input from the user
-  let tries = 6;
-
   let guess = document.querySelector(".inputs-Values").value;
 
   let finalOutput = document.querySelector(".final-output");
-  if (guess > 0 && guess <= 100) {
-    if (guess > randomNumber) {
-      // let finalOutput = document.querySelector(".final-output");
-      tries -= 1;
-      finalOutput.value = `Number is too high ${tries} left!`;
+  if (guess > 0 && guess <= 100 && guesses.length <= 6) {
+    if (guesses.length == 6) {
+      finalOutput.value = `You ran out of tries, ${
+        6 - guesses.length
+      } left! New game?`;
+    } else if (guess > randomNumber) {
+      guesses.push(guess);
+      finalOutput.value = `Number is too high ${6 - guesses.length} left!`;
     } else if (guess < randomNumber) {
-      // let finalOutput = document.querySelector(".final-output");
-      tries -= 1;
-      finalOutput.value = `Number is too low ${tries} left!`;
+      guesses.push(guess);
+      finalOutput.value = `Number is too low ${6 - guesses.length} left!`;
     } else if (guess == randomNumber) {
-      // let finalOutput = document.querySelector(".final-output");
-      tries -= 1;
-      finalOutput.value = `Guess is correct. You win! it took you ${tries} tries!`;
-    } else if (tries == 0) {
-      finalOutput.value = `You ran out of tries, ${tries} left! New game?`;
+      guesses.push(guess);
+      if (guesses.length == 1) {
+        finalOutput.value = `Guess is correct. You win! it took you ${guesses.length} try So lucky!!!`;
+      } else {
+        finalOutput.value = `Guess is correct. You win! it took you ${guesses.length} tries!`;
+      }
     }
   } else {
     // let finalOutput = document.querySelector(".final-output");
     finalOutput.value = "Please enter a number between 1 and 100";
   }
-
-  //If the user inputs a bad input ie 0, empty string, number greater that 100, number less than zero Print "Please enter a number between 1 and 100"
-
-  //If the users guess is higher than the random number print Number is too high, try again (hint use .final-out class to print)
-
-  //If the users guess is lower than the random number print Number is too low, try again  (hint use .final-out class to print)
-
-  //If the user has guessed the random number correctly print out the randomNumber with a message "Guess is correct. You win!"
 }
 
-// For this task we will be making a "New Game" button function which will reset our game,
-// Once the user clicks on this button the user will have new random number to guess
-// 1. Reset the values inside the body of the function
-// 2. Attach our new game button using an event listener to the .btnNewGame button
 function newGame() {
   randomNumber = Math.floor(Math.random() * 100 + 1);
   console.log(randomNumber);
   let guess = document.querySelector(".inputs-Values");
   guess.value = "";
-
-  //Your code here
-  //Reset randomNumber
-  //Reset users input field
-  //Reset tries, and triesTaken by the user
+  guesses = [];
+  document.querySelector(".final-output").value =
+    "Guess a number between 1 and 100";
 }
 
 //keyboard exception
@@ -60,6 +48,7 @@ function keyBoardEvents(e) {
     guessNumber();
   }
 }
+document.querySelector(".btnNewGame").addEventListener("click", newGame);
 
 document.querySelector(".btnGuess").addEventListener("click", guessNumber);
 document.addEventListener("keypress", keyBoardEvents);
