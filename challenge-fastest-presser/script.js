@@ -80,6 +80,7 @@ player1Pressed.style.height = "20%";
 player1Pressed.style.margin = "10% 0 0 25%";
 player1Score.appendChild(player1Pressed);
 player1Pressed.textContent = "How fast can you press the 'S' Key?";
+player1Pressed.value = 0;
 player1Pressed.style.fontSize = "10pt";
 
 //status
@@ -144,6 +145,7 @@ player2Pressed.style.height = "20%";
 player2Pressed.style.margin = "10% 0 0 25%";
 player2Score.appendChild(player2Pressed);
 player2Pressed.textContent = "How fast can you press the 'L' Key?";
+player2Pressed.value = 0;
 player2Pressed.style.fontSize = "10pt";
 
 // let playersClass = document.getElementsByClassName("players");
@@ -163,10 +165,27 @@ button.textContent = "Start";
 button.style.fontWeight = "bolder";
 button.style.fontSize = "16pt";
 
+let button2 = document.createElement("button");
+userInput.appendChild(button2);
+button2.style.width = "100px";
+button2.style.height = "40px";
+// button2.style.borderRadius = "50%";
+button2.style.borderStyle = "dotted";
+button2.style.margin = "10px 0 0 0";
+button2.style.backgroundColor = "rgba(200,0,0,0.4)";
+button2.style.color = "white";
+button2.textContent = "New Game";
+button2.style.fontWeight = "bolder";
+button2.style.fontSize = "12pt";
+
+let colors = [];
+let index = 0;
+
 ////////Countdown functions:
 function setAlarm() {
   // event.preventDefault();
 
+  colors = ["red", "green", "yellow", "purple", "pink"];
   let startingSeconds = input.value;
   let time = startingSeconds;
 
@@ -177,38 +196,61 @@ function setAlarm() {
     let seconds = time % 60;
     seconds = seconds < 10 ? `0` + seconds : seconds;
     timeRem.textContent = `Time Remaining: ${minutes}: ${seconds}`;
-    if (time == 0) {
-      timeRem.textContent = `Time Remaining: 00:00`;
+    if (time == 0 && input.value) {
+      if (player2Pressed.value > player1Pressed.value) {
+        timeRem.textContent = `Player 2 Won with a score of ${player2Pressed.value}, player 1 had a score of ${player1Pressed.value}. New Game?`;
+        timeRem.style.fontSize = "10pt";
+        player1Pressed.textContent = "How fast can you press the 'S' Key?";
+        player2Pressed.textContent = "How fast can you press the 'L' Key?";
+        changeColor();
+      } else if (player1Pressed.value > player2Pressed.value) {
+        timeRem.textContent = `Player 1 Won with a score of ${player1Pressed.value}, player 2 had a score of ${player2Pressed.value}. New Game?`;
+        timeRem.style.fontSize = "10pt";
+        player1Pressed.textContent = "How fast can you press the 'S' Key?";
+        player2Pressed.textContent = "How fast can you press the 'L' Key?";
+        changeColor();
+      }
 
-      let colors = ["red", "green", "yellow", "purple", "pink"];
-      let index = 0;
       function changeColor() {
         timeRem.style.backgroundColor = colors[index];
         index = (index + 1) % colors.length;
         setTimeout(changeColor, 100);
       }
-      changeColor();
+      // changeColor();
     } else if (time > 0) {
-      
       time--;
     }
   }
 }
 
+/// event listeners:
+
 button.addEventListener("click", setAlarm);
+button2.addEventListener("click", startGame);
 
 ///Keyboard events function
 
-function startGame() {}
+function startGame() {
+  input.value = "";
+  player1Pressed.value = 0;
+  player2Pressed.value = 0;
+  timeRem.textContent = "Time Remaining 00:00";
+
+  timeRem.style.backgroundColor = "rgba(10, 40, 100, 0.5)";
+  console.log(timeRem.value);
+}
 
 function keyBoardEvents(e) {
   if (e.keyCode === 83) {
     // On 'S' Pressed
-    let p1Score = 0;
-    p1Score +=1;
-    player1Pressed.textContent = p1Score;
+    player1Pressed.value = player1Pressed.value + 1;
+    console.log(player1Pressed.value);
+    player1Pressed.textContent = player1Pressed.value;
   } else if (e.keyCode === 76) {
     // On 'L' Pressed
+    player2Pressed.value = player2Pressed.value + 1;
+    console.log(player2Pressed.value);
+    player2Pressed.textContent = player2Pressed.value;
   }
 }
 
